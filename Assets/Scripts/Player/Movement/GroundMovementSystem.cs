@@ -39,10 +39,23 @@ public class GroundMovementSystem : MonoBehaviour, IMovementSystem
     public void Move(Vector3 moveInput, float deltaTime)
     {
         if (targetRigidbody == null) return;
-        
-        // 水平移動の処理
-        Vector3 movement = new Vector3(moveInput.x, 0, moveInput.z) * moveSpeed;
-        
+
+        // 現在のTransformの前方向・右方向を使って移動ベクトルを計算
+        Vector3 forward = transform.forward;
+        Vector3 right = transform.right;
+
+        // Y軸方向は0にして、水平面上の移動に限定
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        // 入力に応じて移動方向を決定
+        Vector3 moveDirection = (forward * moveInput.z + right * moveInput.x).normalized;
+
+        // 移動速度を適用
+        Vector3 movement = moveDirection * moveSpeed;
+
         // 現在の垂直速度を保持しつつ、水平移動を適用
         Vector3 newVelocity = new Vector3(movement.x, targetRigidbody.linearVelocity.y, movement.z);
         targetRigidbody.linearVelocity = newVelocity;

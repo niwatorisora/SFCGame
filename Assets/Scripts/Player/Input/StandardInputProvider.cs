@@ -18,27 +18,37 @@ public class StandardInputProvider : MonoBehaviour, IInputProvider
     
     public float GetHorizontalInput()
     {
-        return Input.GetAxis(horizontalAxis);
+        return UnityEngine.Input.GetAxis(horizontalAxis);
     }
     
     public float GetVerticalInput()
     {
-        return Input.GetAxis(verticalAxis);
+        return UnityEngine.Input.GetAxis(verticalAxis);
     }
     
     public bool GetJumpInput()
     {
-        return Input.GetButtonDown(jumpButton);
+        return UnityEngine.Input.GetButtonDown(jumpButton);
     }
 
 
     public float GetMouseXInput()
     {
-        return Input.GetAxis("Mouse X");
+        return UnityEngine.Input.GetAxis("Mouse X");
     }
 
     public float GetMouseYInput()
     {
-        return Input.GetAxis("Mouse Y");
+        return UnityEngine.Input.GetAxis("Mouse Y");
+    }
+
+    public bool GetFireInput()
+    {
+        return UnityEngine.Input.GetButton("Fire1"); // マウス左クリック（連射対応）
+    }
+
+    public bool GetReloadInput()
+    {
+        return UnityEngine.Input.GetKeyDown(KeyCode.R); // Rキー
     }
 }

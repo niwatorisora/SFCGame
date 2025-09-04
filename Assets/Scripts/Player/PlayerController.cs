@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRigidbody;
     private IInputProvider inputProvider;
     private IMovementSystem movementSystem;
+    private WeaponHolder weaponHolder;
 
     [SerializeField] private float playerLookSpeed = 2.0f; // プレイヤーの回転速度
 
@@ -37,6 +38,18 @@ public class PlayerController : MonoBehaviour
         inputProvider = GetComponent<StandardInputProvider>();
         movementSystem = GetComponent<GroundMovementSystem>();
         movementSystem.Initialize(playerRigidbody);
+        
+        // WeaponHolderを取得（同じGameObjectまたは子オブジェクトから）
+        weaponHolder = GetComponent<WeaponHolder>();
+        if (weaponHolder == null)
+        {
+            weaponHolder = GetComponentInChildren<WeaponHolder>();
+        }
+        
+        if (weaponHolder != null)
+        {
+            Debug.Log("[Player] WeaponHolder統合完了");
+        }
     }
     private void HandleInput()
     {

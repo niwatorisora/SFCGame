@@ -35,4 +35,14 @@ public interface IInputProvider
     /// マウスのY軸の入力値を取得
     /// </summary>
     float GetMouseYInput();
+
+    /// <summary>
+    /// 発射入力の状態を取得
+    /// </summary>
+    bool GetFireInput();
+
+    /// <summary>
+    /// リロード入力の状態を取得
+    /// </summary>
+    bool GetReloadInput();
 }
