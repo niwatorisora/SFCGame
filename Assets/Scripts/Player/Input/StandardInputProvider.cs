@@ -30,4 +30,15 @@ public class StandardInputProvider : MonoBehaviour, IInputProvider
     {
         return Input.GetButtonDown(jumpButton);
     }
+
+
+    public float GetMouseXInput()
+    {
+        return Input.GetAxis("Mouse X");
+    }
+
+    public float GetMouseYInput()
+    {
+        return Input.GetAxis("Mouse Y");
+    }
 }

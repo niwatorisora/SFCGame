@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     private IInputProvider inputProvider;
     private IMovementSystem movementSystem;
 
+    [SerializeField] private float playerLookSpeed = 2.0f; // プレイヤーの回転速度
+
     void Start()
     {
         InitializeSystems();
@@ -46,10 +48,18 @@ public class PlayerController : MonoBehaviour
         // 移動システムに移動指示を送信
         movementSystem.Move(moveInput, Time.deltaTime);
 
+        // プレイヤーの水平回転を処理
+        HandlePlayerRotation();
+
         // ジャンプ入力の処理
         if (inputProvider.GetJumpInput())
         {
             movementSystem.Jump();
         }
+    }
+    private void HandlePlayerRotation()
+    {
+        float mouseX = inputProvider.GetMouseXInput() * playerLookSpeed;
+        transform.Rotate(Vector3.up * mouseX);
     }
 }

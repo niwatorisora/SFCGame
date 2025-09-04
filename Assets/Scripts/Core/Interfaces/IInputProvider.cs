@@ -25,4 +25,14 @@ public interface IInputProvider
     /// ジャンプ入力の状態を取得
     /// </summary>
     bool GetJumpInput();
+
+    /// <summary>
+    /// マウスのX軸の入力値を取得
+    /// </summary>
+    float GetMouseXInput();
+
+    /// <summary>
+    /// マウスのY軸の入力値を取得
+    /// </summary>
+    float GetMouseYInput();
 }
