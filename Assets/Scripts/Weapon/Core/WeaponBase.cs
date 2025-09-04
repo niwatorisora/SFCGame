@@ -14,6 +14,9 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
     [Header("Debug")]
     [SerializeField] protected bool enableDebugLogs = true;
     
+    [Header("Audio")]
+    [SerializeField] protected AudioSource audioSource;
+    
     // IWeapon実装
     public int CurrentAmmo => currentAmmo;
     public bool IsReloading => isReloading;
@@ -29,6 +32,7 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
     protected virtual void Awake()
     {
         ValidateComponents();
+        SetupAudioSource();
     }
     
     protected virtual void Start()
@@ -73,12 +77,21 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
     {
         if (!CanFire())
         {
+            // 弾切れの場合は弾切れ音を再生
+            if (currentAmmo <= 0 && !isReloading)
+            {
+                PlaySound(weaponData.EmptySound);
+                LogDebug("弾切れ: 空撃ち音再生");
+            }
             LogDebug($"発射不可: リロード中={isReloading}, 弾薬={currentAmmo}, クールダウン={!IsCooldownComplete()}");
             return;
         }
         
         // 発射前処理（オーバーライド可能）
         OnBeforeFire();
+        
+        // 発射音再生
+        PlaySound(weaponData.FireSound);
         
         // 弾丸生成と発射
         FireBullet();
@@ -137,7 +150,8 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
     /// </summary>
     protected virtual void OnReloadStart()
     {
-        // 継承先で実装
+        PlaySound(weaponData.ReloadStartSound);
+        LogDebug("リロード開始音再生");
     }
     
     /// <summary>
@@ -145,7 +159,8 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
     /// </summary>
     protected virtual void OnReloadComplete()
     {
-        // 継承先で実装
+        PlaySound(weaponData.ReloadCompleteSound);
+        LogDebug("リロード完了音再生");
     }
     
     #endregion
@@ -166,6 +181,23 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
             else
             {
                 Debug.LogWarning($"WeaponBase: FirePointが設定されていません - {name}");
+            }
+        }
+    }
+    
+    private void SetupAudioSource()
+    {
+        if (audioSource == null)
+        {
+            // AudioSourceコンポーネントを探す
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                // AudioSourceが無い場合は自動で追加
+                audioSource = gameObject.AddComponent<AudioSource>();
+                audioSource.playOnAwake = false;
+                audioSource.spatialBlend = 1.0f; // 3D空間音響
+                LogDebug("AudioSourceを自動追加");
             }
         }
     }
@@ -232,6 +264,17 @@ public abstract class WeaponBase : MonoBehaviour, IWeapon
         OnReloadComplete();
         
         LogDebug($"リロード完了: {weaponData.WeaponName} 残弾: {currentAmmo}");
+    }
+    
+    /// <summary>
+    /// 音響効果を再生
+    /// </summary>
+    protected void PlaySound(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
     
     private void LogDebug(string message)

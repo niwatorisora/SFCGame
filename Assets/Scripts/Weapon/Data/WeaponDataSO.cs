@@ -22,6 +22,12 @@ public class WeaponDataSO : ScriptableObject, IWeaponData
     [SerializeField] private int magazineSize = 30;
     [SerializeField] private float reloadTime = 2.5f;
     
+    [Header("Audio Effects")]
+    [SerializeField] private AudioClip fireSound;           // 発射音
+    [SerializeField] private AudioClip reloadStartSound;    // リロード開始音
+    [SerializeField] private AudioClip reloadCompleteSound; // リロード完了音
+    [SerializeField] private AudioClip emptySound;          // 弾切れ音
+    
     // IWeaponData実装
     public string WeaponName => weaponName;
     public GameObject BulletPrefab => bulletPrefab;
@@ -30,6 +36,12 @@ public class WeaponDataSO : ScriptableObject, IWeaponData
     public float FireRate => fireRate;
     public int MagazineSize => magazineSize;
     public float ReloadTime => reloadTime;
+    
+    // Audio Effects実装
+    public AudioClip FireSound => fireSound;
+    public AudioClip ReloadStartSound => reloadStartSound;
+    public AudioClip ReloadCompleteSound => reloadCompleteSound;
+    public AudioClip EmptySound => emptySound;
     
     void OnValidate()
     {

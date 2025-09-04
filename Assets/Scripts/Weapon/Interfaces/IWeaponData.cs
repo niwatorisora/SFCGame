@@ -13,4 +13,10 @@ public interface IWeaponData
     float FireRate { get; }
     int MagazineSize { get; }
     float ReloadTime { get; }
+    
+    // Audio Effects
+    AudioClip FireSound { get; }
+    AudioClip ReloadStartSound { get; }
+    AudioClip ReloadCompleteSound { get; }
+    AudioClip EmptySound { get; }
 }
